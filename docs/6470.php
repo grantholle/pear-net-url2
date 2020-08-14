@@ -21,7 +21,7 @@
 */
     error_reporting(E_ALL | E_STRICT);
 
-    require_once 'Net/URL2.php';
+    require_once 'src/URL2.php';
 
     $url = new Net_URL2('https://www.example.com/foo/bar/index.php?foo=bar');
 

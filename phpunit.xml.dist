@@ -1,5 +1,4 @@
-<phpunit bootstrap="Net/URL2.php"
-         colors="false"
+<phpunit colors="false"
          convertErrorsToExceptions="true"
          convertNoticesToExceptions="true"
          convertWarningsToExceptions="true"
@@ -11,7 +10,7 @@
   </testsuites>
   <filter>
     <whitelist>
-      <file>Net/URL2.php</file>
+      <directory suffix=".php">tests</directory>
     </whitelist>
   </filter>
 </phpunit>

@@ -22,7 +22,7 @@
 
 error_reporting(E_ALL | E_STRICT);
 
-require 'Net/URL2.php';
+require 'src/URL2.php';
 
 $url = new Net_URL2(
     'https://example.com/pls/portal30/PORTAL30.wwpob_page.changetabs?'

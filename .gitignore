@@ -1,7 +1,9 @@
 # pear related
-/Net_URL2-*.tgz
+*.tgz
 
 # composer related
 vendor/
 /composer.lock
 /composer.phar
+.phpunit.result.cache
+.idea

@@ -1,6 +1,11 @@
 <?php
+
+namespace Pear\Net;
+
+use Exception;
+
 /**
- * Net_URL2, a class representing a URL as per RFC 3986.
+ * Url2, a class representing a URL as per RFC 3986.
  *
  * PHP version 5
  *
@@ -18,7 +23,7 @@
  *   * Redistributions in binary form must reproduce the above copyright
  *     notice, this list of conditions and the following disclaimer in
  *     the documentation and/or other materials provided with the distribution.
- *   * Neither the name of the Net_URL2 nor the names of its contributors may
+ *   * Neither the name of the Url2 nor the names of its contributors may
  *     be used to endorse or promote products derived from this software
  *     without specific prior written permission.
  *
@@ -35,7 +40,7 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *
  * @category  Networking
- * @package   Net_URL2
+ * @package   Url2
  * @author    Christian Schmidt <schmidt@php.net>
  * @copyright 2007-2009 Peytz & Co. A/S
  * @license   https://spdx.org/licenses/BSD-3-Clause BSD-3-Clause
@@ -47,14 +52,14 @@
  * Represents a URL as per RFC 3986.
  *
  * @category  Networking
- * @package   Net_URL2
+ * @package   Url2
  * @author    Christian Schmidt <schmidt@php.net>
  * @copyright 2007-2009 Peytz & Co. A/S
  * @license   https://spdx.org/licenses/BSD-3-Clause BSD-3-Clause
  * @version   Release: @package_version@
- * @link      https://pear.php.net/package/Net_URL2
+ * @link      https://pear.php.net/package/Url2
  */
-class Net_URL2
+class Url2
 {
     /**
      * Do strict parsing in resolve() (see RFC 3986, section 5.2.2). Default
@@ -481,6 +486,7 @@ class Net_URL2
      * is returned.
      *
      * @return array
+     * @throws Exception
      */
     public function getQueryVariables()
     {
@@ -519,11 +525,12 @@ class Net_URL2
     /**
      * Parse a single query key=value pair into an existing php array
      *
-     * @param string $key   query-key
+     * @param string $key query-key
      * @param string $value query-value
-     * @param array  $array of existing query variables (if any)
+     * @param array $array of existing query variables (if any)
      *
      * @return mixed
+     * @throws Exception
      */
     private function _queryArrayByKey($key, $value, array $array = array())
     {
@@ -563,11 +570,11 @@ class Net_URL2
      * Parse a key-buffer to place value in array
      *
      * @param string $buffer to consume all keys from
-     * @param string $value  to be set/add
-     * @param array  $array  to traverse and set/add value in
+     * @param string $value to be set/add
+     * @param array|null $array $array  to traverse and set/add value in
      *
+     * @return string
      * @throws Exception
-     * @return array
      */
     private function _queryArrayByBrackets($buffer, $value, array $array = null)
     {
@@ -585,7 +592,7 @@ class Net_URL2
                 }
                 // @codeCoverageIgnoreStart
                 throw new Exception(
-                    'Net_URL2 Internal Error: '. __METHOD__ .'(): ' .
+                    'Url2 Internal Error: '. __METHOD__ .'(): ' .
                     'Opening bracket [ must exist at offset 0'
                 );
                 // @codeCoverageIgnoreEnd
@@ -598,7 +605,7 @@ class Net_URL2
                 // See as well the first exception for the opening bracket.
                 // @codeCoverageIgnoreStart
                 throw new Exception(
-                    'Net_URL2 Internal Error: '. __METHOD__ .'(): ' .
+                    'Url2 Internal Error: '. __METHOD__ .'(): ' .
                     'Closing bracket ] must exist, not found'
                 );
                 // @codeCoverageIgnoreEnd
@@ -871,17 +878,17 @@ class Net_URL2
     }
 
     /**
-     * Returns an Net_URL2 instance representing an absolute URL relative to
+     * Returns an Url2 instance representing an absolute URL relative to
      * this URL.
      *
-     * @param Net_URL2|string $reference relative URL
+     * @param Url2|string $reference relative URL
      *
      * @throws Exception
      * @return $this
      */
     public function resolve($reference)
     {
-        if (!$reference instanceof Net_URL2) {
+        if (!$reference instanceof Url2) {
             $reference = new self($reference);
         }
         if (!$reference->_isFragmentOnly() && !$this->isAbsolute()) {
@@ -1043,7 +1050,7 @@ class Net_URL2
     }
 
     /**
-     * Returns a Net_URL2 instance representing the canonical URL of the
+     * Returns a Url2 instance representing the canonical URL of the
      * currently executing PHP script.
      *
      * @throws Exception
@@ -1073,6 +1080,7 @@ class Net_URL2
      * Returns the URL used to retrieve the current request.
      *
      * @return  string
+     * @throws Exception
      */
     public static function getRequestedURL()
     {
@@ -1080,7 +1088,7 @@ class Net_URL2
     }
 
     /**
-     * Returns a Net_URL2 instance representing the URL used to retrieve the
+     * Returns a Url2 instance representing the URL used to retrieve the
      * current request.
      *
      * @throws Exception
@@ -1118,14 +1126,14 @@ class Net_URL2
      * A simple version of http_build_query in userland. The encoded string is
      * percentage encoded according to RFC 3986.
      *
-     * @param array  $data      An array, which has to be converted into
+     * @param array $data An array, which has to be converted into
      *                          QUERY_STRING. Anything is possible.
      * @param string $separator Separator {@link self::OPTION_SEPARATOR_OUTPUT}
-     * @param string $key       For stacked values (arrays in an array).
+     * @param string|null $key For stacked values (arrays in an array).
      *
      * @return string
      */
-    protected function buildQuery(array $data, $separator, $key = null)
+    protected function buildQuery(array $data, string $separator, string $key = null)
     {
         $query = array();
         $drop_names = (

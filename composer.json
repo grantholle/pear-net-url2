@@ -1,6 +1,6 @@
 {
-    "name": "pear/net_url2",
-    "description": "Class for parsing and handling URL. Provides parsing of URLs into their constituent parts (scheme, host, path etc.), URL generation, and resolving of relative URLs.",
+    "name": "grantholle/pear-net-url2",
+    "description": "A psr-4 compliant port of pear/net_url2: Class for parsing and handling URL. Provides parsing of URLs into their constituent parts (scheme, host, path etc.), URL generation, and resolving of relative URLs.",
     "type": "library",
     "keywords": [
         "pear",
@@ -10,7 +10,7 @@
         "networking",
         "rfc3986"
     ],
-    "homepage": "https://github.com/pear/Net_URL2",
+    "homepage": "https://github.com/grantholle/pear-net-url2",
     "license": "BSD-3-Clause",
     "authors": [
         {
@@ -24,27 +24,30 @@
         {
             "name": "Christian Schmidt",
             "email": "chmidt@php.net"
+        },
+        {
+            "name": "Grant Holle",
+            "homepage": "https://grantholle.com"
         }
     ],
     "support": {
-        "issues": "https://pear.php.net/bugs/search.php?cmd=display&package_name[]=Net_URL2",
-        "source": "https://github.com/pear/Net_URL2"
+        "issues": "https://github.com/grantholle/pear-net-url2/issues",
+        "source": "https://github.com/grantholle/pear-net-url2"
     },
     "require": {
-        "php": ">=5.1.4"
+        "php": "^7.2"
     },
     "autoload": {
-        "classmap": ["Net/URL2.php"]
+        "psr-4": {
+            "Pear\\Net\\": "src"
+        }
     },
-    "include-path": [
-        "./"
-    ],
-    "extra": {
-        "branch-alias": {
-            "dev-master": "2.2.x-dev"
+    "autoload-dev": {
+        "psr-4": {
+            "Tests\\": "tests"
         }
     },
     "require-dev": {
-        "phpunit/phpunit": ">=3.3.0"
+        "phpunit/phpunit": "^8"
     }
 }

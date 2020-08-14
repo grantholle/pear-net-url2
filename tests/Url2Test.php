@@ -1,39 +1,45 @@
 <?php
+
+namespace Tests;
+
 /**
- * Net_URL2, a class representing a URL as per RFC 3986.
+ * Url2(), a class representing a URL as per RFC 3986.
  *
  * PHP version 5
  *
  * @category Networking
- * @package  Net_URL2
+ * @package  Url2()
  * @author   Some Pear Developers <pear@php.net>
  * @license  https://spdx.org/licenses/BSD-3-Clause BSD-3-Clause
  * @link     https://tools.ietf.org/html/rfc3986
  */
 
+use Pear\Net\Url2;
+use PHPUnit\Framework\Exception;
+
 /**
- * Test class for Net_URL2.
+ * Test class for Url2().
  *
  * @category Networking
- * @package  Net_URL2
+ * @package  Url2()
  * @author   Some Pear Developers <pear@php.net>
  * @license  https://spdx.org/licenses/BSD-3-Clause BSD-3-Clause
  * @version  Release: @package_version@
- * @link     https://pear.php.net/package/Net_URL2
+ * @link     https://pear.php.net/package/Url2()
  */
-class Net_URL2Test extends PHPUnit_Framework_TestCase
+class Url2Test extends \PHPUnit\Framework\TestCase
 {
     /**
      * Tests setting a zero-length string and false as authority
      * Also: Regression test for Bug #20420
      *
-     * @covers Net_URL2::setAuthority
+     * @covers Url2::setAuthority
      * @return void
      * @link https://pear.php.net/bugs/bug.php?id=20420
      */
     public function testSetEmptyAuthority()
     {
-        $url = new Net_URL2('http://www.example.com/');
+        $url = new Url2('http://www.example.com/');
         $url->setAuthority('');
         $this->assertSame('', $url->getAuthority());
         $this->assertSame('', $url->getHost());
@@ -49,19 +55,19 @@ class Net_URL2Test extends PHPUnit_Framework_TestCase
      * Tests setting an empty userinfo part
      * Also: Regression test for Bug #20013 and Bug #20399
      *
-     * @covers Net_URL2::setUserinfo
-     * @covers Net_URL2::getUserinfo
-     * @covers Net_URL2::getURL
+     * @covers Url2::setUserinfo
+     * @covers Url2::getUserinfo
+     * @covers Url2::getURL
      * @return void
      * @link https://pear.php.net/bugs/bug.php?id=20013
      * @link https://pear.php.net/bugs/bug.php?id=20399
      */
     public function testSetEmptyUserinfo()
     {
-        $url = new Net_URL2('http://@www.example.com/');
+        $url = new Url2('http://@www.example.com/');
         $this->assertSame('http://www.example.com/', $url->getURL());
 
-        $url = new Net_URL2('http://www.example.com/');
+        $url = new Url2('http://www.example.com/');
         $this->assertSame('http://www.example.com/', $url->getURL());
         $url->setUserinfo('');
         $this->assertSame('http://www.example.com/', $url->getURL());
@@ -76,9 +82,9 @@ class Net_URL2Test extends PHPUnit_Framework_TestCase
      *
      * Also: Regression test for Bug #20385
      *
-     * @covers Net_URL2::getUserinfo
-     * @covers Net_URL2::normalize
-     * @covers Net_URL2::getNormalizedURL
+     * @covers Url2::getUserinfo
+     * @covers Url2::normalize
+     * @covers Url2::getNormalizedURL
      * @return void
      * @link https://pear.php.net/bugs/bug.php?id=20385
      */
@@ -86,7 +92,7 @@ class Net_URL2Test extends PHPUnit_Framework_TestCase
     {
         $testUrl = 'http://www.example.com/';
 
-        $url = new Net_URL2($testUrl);
+        $url = new Url2($testUrl);
         $this->assertFalse($url->getUserinfo());
 
         $url->normalize();
@@ -104,7 +110,7 @@ class Net_URL2Test extends PHPUnit_Framework_TestCase
     public function testSetQueryVariable()
     {
 
-        $url = new Net_URL2('http://www.example.com/');
+        $url = new Url2('http://www.example.com/');
         $url->setQueryVariable('pear', 'fun');
         $this->assertEquals($url->getURL(), 'http://www.example.com/?pear=fun');
     }
@@ -117,7 +123,7 @@ class Net_URL2Test extends PHPUnit_Framework_TestCase
     public function testSetQueryVariables()
     {
 
-        $url = new Net_URL2('http://www.example.com/');
+        $url = new Url2('http://www.example.com/');
         $url->setQueryVariables(array('pear' => 'fun'));
         $this->assertEquals('http://www.example.com/?pear=fun', $url->getURL());
         $url->setQueryVariables(array('pear' => 'fun for sure'));
@@ -133,7 +139,7 @@ class Net_URL2Test extends PHPUnit_Framework_TestCase
      */
     public function testUnsetQueryVariable()
     {
-        $url = new Net_URL2(
+        $url = new Url2(
             'http://www.example.com/?name=david&pear=fun&fish=slippery'
         );
 
@@ -157,7 +163,7 @@ class Net_URL2Test extends PHPUnit_Framework_TestCase
     public function testSetQuery()
     {
 
-        $url = new Net_URL2('http://www.example.com/');
+        $url = new Url2('http://www.example.com/');
         $url->setQuery('flapdoodle&dilly%20all%20day');
         $this->assertEquals(
             $url->getURL(), 'http://www.example.com/?flapdoodle&dilly%20all%20day'
@@ -172,9 +178,9 @@ class Net_URL2Test extends PHPUnit_Framework_TestCase
     public function testGetQuery()
     {
 
-        $url = new Net_URL2('http://www.example.com/?foo');
+        $url = new Url2('http://www.example.com/?foo');
         $this->assertEquals($url->getQuery(), 'foo');
-        $url = new Net_URL2('http://www.example.com/?pear=fun&fruit=fruity');
+        $url = new Url2('http://www.example.com/?pear=fun&fruit=fruity');
         $this->assertEquals($url->getQuery(), 'pear=fun&fruit=fruity');
     }
 
@@ -186,7 +192,7 @@ class Net_URL2Test extends PHPUnit_Framework_TestCase
     public function testSetScheme()
     {
 
-        $url = new Net_URL2('http://www.example.com/');
+        $url = new Url2('http://www.example.com/');
         $url->setScheme('ftp');
         $this->assertEquals($url->getURL(), 'ftp://www.example.com/');
         $url->setScheme('gopher');
@@ -201,7 +207,7 @@ class Net_URL2Test extends PHPUnit_Framework_TestCase
     public function testSetFragment()
     {
 
-        $url = new Net_URL2('http://www.example.com/');
+        $url = new Url2('http://www.example.com/');
         $url->setFragment('pear');
         $this->assertEquals('http://www.example.com/#pear', $url->getURL());
     }
@@ -277,17 +283,17 @@ class Net_URL2Test extends PHPUnit_Framework_TestCase
      *
      * @param string $baseURL               base-URI
      * @param array  $relativeAbsolutePairs url-pairs, relative => resolved
-     * @param array  $options               Net_URL2 options
+     * @param array  $options               Url2() options
      *
      * @dataProvider provideResolveUrls
-     * @covers Net_URL2::resolve
+     * @covers Url2::resolve
      * @return void
      */
     public function testResolveUrls($baseURL, array $relativeAbsolutePairs,
         array $options = array()
     ) {
         $options = $this->_translateOptionData($options);
-        $base    = new Net_URL2($baseURL, $options);
+        $base    = new Url2($baseURL, $options);
         $count = count($relativeAbsolutePairs);
         $this->assertGreaterThan(0, $count, 'relative-absolute-pairs data is empty');
         foreach ($relativeAbsolutePairs as $relativeURL => $absoluteURL) {
@@ -298,7 +304,7 @@ class Net_URL2Test extends PHPUnit_Framework_TestCase
     /**
      * Helper method to turn options with strings as the constant names
      * (to allow to externalize the fixtures) into a concrete options
-     * array that uses the values from the Net_URL2 class constants.
+     * array that uses the values from the Url2() class constants.
      *
      * @param array $options options
      *
@@ -310,7 +316,7 @@ class Net_URL2Test extends PHPUnit_Framework_TestCase
         foreach ($options as $name => $value) {
             if ($name[0] === ':') {
                 unset($options[$name]);
-                $options[constant("Net_URL2$name")] = $value;
+                $options[constant("\Pear\Net\Url2$name")] = $value;
             }
         }
         return $options;
@@ -319,18 +325,18 @@ class Net_URL2Test extends PHPUnit_Framework_TestCase
     /**
      * Test the resolve() function throwing an exception with invalid data.
      *
-     * @covers Net_URL2::resolve
+     * @covers Url2::resolve
      * @return void
      */
     public function testResolveException()
     {
         // resolving a relative to a relative URL throws an exception
-        $base = new Net_URL2('news.html?category=arts');
+        $base = new Url2('news.html?category=arts');
         $this->addToAssertionCount(1);
         try {
             $base->resolve('../arts.html#section-2.4');
-        } catch (Exception $e) {
-            $expected = 'Base-URL must be absolute if reference is not fragment-onl';
+        } catch (\Exception $e) {
+            $expected = 'Base-URL must be absolute if reference is not fragment-only';
             $this->assertStringStartsWith($expected, $e->getMessage());
             return;
         }
@@ -366,8 +372,8 @@ class Net_URL2Test extends PHPUnit_Framework_TestCase
      */
     public function testUrlEncoding()
     {
-        $options = array(Net_URL2::OPTION_DROP_SEQUENCE => false);
-        $url     = new Net_URL2('http://localhost/bug.php', $options);
+        $options = array(Url2::OPTION_DROP_SEQUENCE => false);
+        $url     = new Url2('http://localhost/bug.php', $options);
         $url->setQueryVariables(
             array(
                 'indexed' => array(
@@ -386,12 +392,12 @@ class Net_URL2Test extends PHPUnit_Framework_TestCase
      * A test to verify that keys in QUERY_STRING are encoded by default.
      *
      * @return void
-     * @see    Net_URL2::OPTION_ENCODE_KEYS
-     * @see    Net_URL2::buildQuery()
+     * @see    Url2::OPTION_ENCODE_KEYS
+     * @see    Url2::buildQuery()
      */
     public function testEncodeKeys()
     {
-        $url = new Net_URL2('http://example.org');
+        $url = new Url2('http://example.org');
         $url->setQueryVariables(array('helgi rulez' => 'till too'));
         $this->assertEquals(
             'http://example.org?helgi%20rulez=till%20too',
@@ -401,17 +407,17 @@ class Net_URL2Test extends PHPUnit_Framework_TestCase
 
     /**
      * A test to verify that keys in QUERY_STRING are not encoded when we supply
-     * 'false' via {@link Net_URL2::__construct()}.
+     * 'false' via {@link Url2::__construct()}.
      *
      * @return void
-     * @see    Net_URL2::OPTION_ENCODE_KEYS
-     * @see    Net_URL2::buildQuery()
+     * @see    Url2::OPTION_ENCODE_KEYS
+     * @see    Url2::buildQuery()
      */
     public function testDontEncodeKeys()
     {
-        $url = new Net_URL2(
+        $url = new Url2(
             'http://example.org',
-            array(Net_URL2::OPTION_ENCODE_KEYS => false)
+            array(Url2::OPTION_ENCODE_KEYS => false)
         );
         $url->setQueryVariables(array('till rulez' => 'helgi too'));
         $this->assertEquals(
@@ -431,13 +437,13 @@ class Net_URL2Test extends PHPUnit_Framework_TestCase
      */
     public function testUseBrackets()
     {
-        $url = new Net_URL2('http://example.org/');
+        $url = new Url2('http://example.org/');
         $url->setQueryVariables(array('foo' => array('bar', 'baz')));
         $expected = 'http://example.org/?foo[]=bar&foo[]=baz';
         $this->assertEquals($expected, $url->getURL());
 
-        $options = array(Net_URL2::OPTION_DROP_SEQUENCE => false);
-        $url     = new Net_URL2('http://example.org/', $options);
+        $options = array(Url2::OPTION_DROP_SEQUENCE => false);
+        $url     = new Url2('http://example.org/', $options);
         $url->setQueryVariables(array('foo' => array('bar', 'foobar')));
         $expected = 'http://example.org/?foo[0]=bar&foo[1]=foobar';
         $this->assertEquals($expected, $url->getURL());
@@ -450,9 +456,9 @@ class Net_URL2Test extends PHPUnit_Framework_TestCase
      */
     public function testDontUseBrackets()
     {
-        $url = new Net_URL2(
+        $url = new Url2(
             'http://example.org/',
-            array(Net_URL2::OPTION_USE_BRACKETS => false)
+            array(Url2::OPTION_USE_BRACKETS => false)
         );
         $url->setQueryVariables(array('foo' => array('bar', 'foobar')));
         $this->assertEquals(
@@ -483,7 +489,7 @@ class Net_URL2Test extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * test that Net_URL2 works with the example URIs from RFC 3986 Section 1.1.2
+     * test that Url2() works with the example URIs from RFC 3986 Section 1.1.2
      *
      * @param string $uri example URI
      *
@@ -494,7 +500,7 @@ class Net_URL2Test extends PHPUnit_Framework_TestCase
      */
     public function testExampleUri($uri)
     {
-        $url = new Net_URL2($uri);
+        $url = new Url2($uri);
         $this->assertSame($uri, $url->__toString());
         $url->normalize();
         $this->assertSame($uri, $url->__toString());
@@ -539,18 +545,18 @@ class Net_URL2Test extends PHPUnit_Framework_TestCase
      * @param string $assertion Assertion
      *
      * @dataProvider providePath
-     * @covers Net_URL2::removeDotSegments
+     * @covers Url2::removeDotSegments
      * @return void
      */
     public function testRemoveDotSegments($path, $assertion)
     {
-        $this->assertEquals($assertion, Net_URL2::removeDotSegments($path));
+        $this->assertEquals($assertion, Url2::removeDotSegments($path));
     }
 
     /**
      * Test removeDotSegments() loop limit warning
      *
-     * @covers Net_URL2::removeDotSegments
+     * @covers Url2::removeDotSegments
      * @return void
      */
     public function testRemoveDotSegmentsLoopLimit()
@@ -558,7 +564,7 @@ class Net_URL2Test extends PHPUnit_Framework_TestCase
         $loopLimit = 256;
         $segments  = str_repeat('a/', $loopLimit);
 
-        @Net_URL2::removeDotSegments($segments . 'b/');
+        @Url2::removeDotSegments($segments . 'b/');
 
         $this->_assertLastErrorContains(sprintf(' loop limit %d ', $loopLimit + 1));
         $this->_assertLastErrorContains(" (left: '/b/')");
@@ -575,7 +581,7 @@ class Net_URL2Test extends PHPUnit_Framework_TestCase
         // If the second (expected) value is set or not null, parse_str() differs.
         // Notes on PHP differences with each entry/block
         return array(
-            // Net_URL2::getQueryVariables() non-bracket mode
+            // Url2::getQueryVariables() non-bracket mode
             array('test=1&t%65st=%41&extra=',
                 array('test' => array('1', 'A'), 'extra' => ''),
                 array('::OPTION_USE_BRACKETS' => false)),
@@ -623,13 +629,13 @@ class Net_URL2Test extends PHPUnit_Framework_TestCase
      *
      * @param string $query    string
      * @param mixed  $expected null to test against parse_str() behavior
-     * @param array  $options  Net_URL2 options
+     * @param array  $options  Url2() options
      *
      * @dataProvider provideQueryStrings
-     * @covers       Net_URL2::getQueryVariables
-     * @covers       Net_URL2::_queryArrayByKey
-     * @covers       Net_URL2::_queryArrayByBrackets
-     * @covers       Net_URL2::_queryKeyBracketOffset
+     * @covers       Url2::getQueryVariables
+     * @covers       Url2::_queryArrayByKey
+     * @covers       Url2::_queryArrayByBrackets
+     * @covers       Url2::_queryKeyBracketOffset
      * @return void
      */
     public function testGetQueryVariables($query, $expected = null,
@@ -637,7 +643,7 @@ class Net_URL2Test extends PHPUnit_Framework_TestCase
     ) {
         $options = $this->_translateOptionData($options);
 
-        $url = new Net_URL2('', $options);
+        $url = new Url2('', $options);
 
         if ($expected === null) {
             // parse_str() is in PHP before copy on write, therefore
@@ -693,7 +699,7 @@ class Net_URL2Test extends PHPUnit_Framework_TestCase
      *
      * @return void
      * @dataProvider provideHostAndPort
-     * @covers       Net_URL2::setAuthority()
+     * @covers       Url2::setAuthority()
      * @link         https://pear.php.net/bugs/bug.php?id=20423
      * @link         http://tools.ietf.org/html/rfc3986#section-3.2.2
      * @link         http://tools.ietf.org/html/rfc3986#section-3.2
@@ -702,25 +708,25 @@ class Net_URL2Test extends PHPUnit_Framework_TestCase
     public function testHostAndPort($authority, $expectedHost, $expectedPort)
     {
         $uri = "http://{$authority}";
-        $url = new Net_URL2($uri);
+        $url = new Url2($uri);
         $this->assertSame($expectedHost, $url->getHost());
         $this->assertSame($expectedPort, $url->getPort());
     }
 
     /**
-     * This is a regression test to test that Net_URL2::getQueryVariables() does
+     * This is a regression test to test that Url2::getQueryVariables() does
      * not have a problem with nested array values in form of stacked brackets and
      * was reported as Bug #17036 on 2010-01-26 15:48 UTC that there would be
      * a problem with parsed query string.
      *
      * @link   https://pear.php.net/bugs/bug.php?id=17036
-     * @covers Net_URL2::getQueryVariables
+     * @covers Url2::getQueryVariables
      * @return void
      */
     public function test17036()
     {
         $queryString = 'start=10&test[0][first][1.1][20]=coucou';
-        $url         = new Net_URL2('?' . $queryString);
+        $url         = new Url2('?' . $queryString);
         $vars = $url->getQueryVariables();
 
         $expected = array();
@@ -740,7 +746,7 @@ class Net_URL2Test extends PHPUnit_Framework_TestCase
      */
     public function test19176()
     {
-        $foo  = new Net_URL2('http://www.example.com');
+        $foo  = new Url2('http://www.example.com');
         $test = $foo->resolve('test.html')->getURL();
         $this->assertEquals('http://www.example.com/test.html', $test);
     }
@@ -754,13 +760,13 @@ class Net_URL2Test extends PHPUnit_Framework_TestCase
      */
     public function test19315()
     {
-        $actual = Net_URL2::removeDotSegments('0');
+        $actual = Url2::removeDotSegments('0');
         $this->assertSame('0', $actual);
 
         $nonStringObject = (object)array();
         try {
-            Net_URL2::removeDotSegments($nonStringObject);
-        } catch (PHPUnit_Framework_Error $error) {
+            Url2::removeDotSegments($nonStringObject);
+        } catch (\Error $error) {
             $this->addToAssertionCount(1);
         }
 
@@ -790,7 +796,7 @@ class Net_URL2Test extends PHPUnit_Framework_TestCase
             . 'o.&term=108-88-3&lang=en&region=US&mode=match+partialmax&N=0+2200030'
             . '48+219853269+219853286';
 
-        $url = new Net_URL2($urlWithSpace);
+        $url = new Url2($urlWithSpace);
 
         $this->assertTrue($url->isAbsolute());
 
@@ -804,7 +810,7 @@ class Net_URL2Test extends PHPUnit_Framework_TestCase
 
         $input    = 'http://example.com/get + + to my nose/';
         $expected = 'http://example.com/get%20+%20+%20to%20my%20nose/';
-        $actual   = new Net_URL2($input);
+        $actual   = new Url2($input);
         $this->assertEquals($expected, $actual);
         $actual->normalize();
     }
@@ -862,7 +868,7 @@ class Net_URL2Test extends PHPUnit_Framework_TestCase
         $last = null;
 
         foreach ($urls as $index => $url) {
-            $url = new Net_Url2($url);
+            $url = new Url2($url);
             $url->normalize();
             if ($index) {
                 $this->assertSame((string)$last, (string)$url);
@@ -874,13 +880,13 @@ class Net_URL2Test extends PHPUnit_Framework_TestCase
     /**
      * This is a coverage test to invoke __get and __set
      *
-     * @covers Net_URL2::__get
-     * @covers Net_URL2::__set
+     * @covers Url2::__get
+     * @covers Url2::__set
      * @return void
      */
     public function testMagicSetGet()
     {
-        $url = new Net_URL2('');
+        $url = new Url2('');
 
         $property       = 'authority';
         $url->$property = $value = 'value';
@@ -908,7 +914,7 @@ class Net_URL2Test extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * Tests Net_URL2 RFC 3986 5.3. Component Recomposition in the light
+     * Tests Url2() RFC 3986 5.3. Component Recomposition in the light
      * of normalization
      *
      * This is also a regression test to test that a missing authority works well
@@ -920,22 +926,22 @@ class Net_URL2Test extends PHPUnit_Framework_TestCase
      * @param string $uri URI
      *
      * @return       void
-     * @covers       Net_URL2::getUrl()
-     * @covers       Net_URL2::normalize()
+     * @covers       Url2::getUrl()
+     * @covers       Url2::normalize()
      * @dataProvider provideComposedAndNormalized
      * @link         https://pear.php.net/bugs/bug.php?id=20418
      * @see          testExampleUri
      */
     public function testComponentRecompositionAndNormalization($uri)
     {
-        $url = new Net_URL2($uri);
+        $url = new Url2($uri);
         $this->assertSame($uri, $url->getURL());
         $url->normalize();
         $this->assertSame($uri, $url->getURL());
     }
 
     /**
-     * Tests Net_URL2 ctors URL parameter works with objects implementing
+     * Tests Url2() ctors URL parameter works with objects implementing
      * __toString().
      *
      * @dataProvider provideEquivalentUrlLists
@@ -946,8 +952,8 @@ class Net_URL2Test extends PHPUnit_Framework_TestCase
     {
         $urls = func_get_args();
         foreach ($urls as $url) {
-            $urlA = new Net_URL2($url);
-            $urlB = new Net_URL2($urlA);
+            $urlA = new Url2($url);
+            $urlB = new Url2($urlA);
             $this->assertSame((string)$urlA, (string)$urlB);
         }
     }
@@ -956,13 +962,13 @@ class Net_URL2Test extends PHPUnit_Framework_TestCase
      * This is a feature test to see that the userinfo's data is getting
      * encoded as outlined in #19684.
      *
-     * @covers Net_URL2::setAuthority
-     * @covers Net_URL2::setUserinfo
+     * @covers Url2::setAuthority
+     * @covers Url2::setUserinfo
      * @return void
      */
     public function testEncodeDataUserinfoAuthority()
     {
-        $url = new Net_URL2('http://john doe:secret@example.com/');
+        $url = new Url2('http://john doe:secret@example.com/');
         $this->assertSame('http://john%20doe:secret@example.com/', (string)$url);
 
         $url->setUserinfo('john doe');
@@ -979,14 +985,14 @@ class Net_URL2Test extends PHPUnit_Framework_TestCase
      * It was reported as Bug #20156 on 2013-12-27 22:56 UTC
      * that setAuthority() with "0" as host would not work
      *
-     * @covers Net_URL2::setAuthority
-     * @covers Net_URL2::getAuthority
-     * @covers Net_URL2::setHost
+     * @covers Url2::setAuthority
+     * @covers Url2::getAuthority
+     * @covers Url2::setHost
      * @return void
      */
     public function test20156()
     {
-        $url  = new Net_URL2('http://user:pass@example.com:127/');
+        $url  = new Url2('http://user:pass@example.com:127/');
         $host = '0';
         $url->setHost($host);
         $this->assertSame('user:pass@0:127', $url->getAuthority());
@@ -1005,13 +1011,13 @@ class Net_URL2Test extends PHPUnit_Framework_TestCase
      * It was reported as Bug #20157 on 2013-12-27 23:42 UTC that
      * normalize() with "0" as path would not work.
      *
-     * @covers Net_URL2::normalize
+     * @covers Url2::normalize
      * @return void
      */
     public function test20157()
     {
         $subject = 'http://example.com';
-        $url     = new Net_URL2($subject);
+        $url     = new Url2($subject);
         $url->setPath('0');
         $url->normalize();
         $this->assertSame("$subject/0", (string)$url);
@@ -1024,13 +1030,13 @@ class Net_URL2Test extends PHPUnit_Framework_TestCase
      * It was reported as Bug #20158 2013-12-28 14:49 UTC that fragment-only
      * references would not be resolved to non-absolute base URI
      *
-     * @covers Net_URL2::resolve
-     * @covers Net_URL2::_isFragmentOnly
+     * @covers Url2::resolve
+     * @covers Url2::_isFragmentOnly
      * @return void
      */
     public function test20158()
     {
-        $base     = new Net_URL2('myfile.html');
+        $base     = new Url2('myfile.html');
         $resolved = $base->resolve('#world');
         $this->assertSame('myfile.html#world', (string)$resolved);
     }
@@ -1043,12 +1049,12 @@ class Net_URL2Test extends PHPUnit_Framework_TestCase
      * It was reported as Bug #20159 2013-12-28 17:18 UTC that authority
      * would not be terminated by slash
      *
-     * @covers Net_URL2::getUrl
+     * @covers Url2::getUrl
      * @return void
      */
     public function test20159()
     {
-        $url = new Net_URL2('index.html');
+        $url = new Url2('index.html');
         $url->setHost('example.com');
         $this->assertSame('//example.com/index.html', (string)$url);
     }
@@ -1063,26 +1069,26 @@ class Net_URL2Test extends PHPUnit_Framework_TestCase
      *
      * Tests with a default authority for the "file" URI scheme
      *
-     * @covers Net_URL2::getURL
+     * @covers Url2::getURL
      * @return void
      * @link https://pear.php.net/bugs/bug.php?id=20304
      */
     public function test20304()
     {
         $file = 'file:///path/to/file';
-        $url = new Net_URL2($file);
+        $url = new Url2($file);
         $this->assertSame($file, (string) $url);
 
         $file = 'file://localhost/path/to/file';
-        $url = new Net_URL2($file);
+        $url = new Url2($file);
         $this->assertSame($file, (string) $url);
 
         $file = 'file://user@/path/to/file';
-        $url = new Net_URL2($file);
+        $url = new Url2($file);
         $this->assertSame($file, (string) $url);
 
         $file = 'FILE:///path/to/file';
-        $url = new Net_URL2($file);
+        $url = new Url2($file);
         $this->assertSame($file, (string) $url);
     }
 }
